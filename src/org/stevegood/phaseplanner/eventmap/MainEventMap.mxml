@@ -3,9 +3,20 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:mate="http://mate.asfusion.com/">
+	<fx:Script>
+		<![CDATA[
+			import org.stevegood.phaseplanner.core.AppEvent;
+		]]>
+	</fx:Script>
 	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		<mate:Debugger level="{Debugger.ALL}" />
+		
+		<mate:EventHandlers type="{AppEvent.APPLICATION_CREATION_COMPLETE}" debug="true">
+			
+		</mate:EventHandlers>
+		
 	</fx:Declarations>
 	
 </mate:EventMap>
