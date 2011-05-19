@@ -12,11 +12,15 @@ package org.stevegood.phaseplanner.db
 		}
 		
 		public function initDb():void{
-			
+			// TODO: this is called after the app has launched to get the DB ready for quieries
 		}
 		
 		private function createDb():void{
-			
+			// TODO: this is called if the DB does not already exist
+		}
+		
+		public function executeQuery(query:String):void{
+			// TODO: handle query execution
 		}
 		
 	}
