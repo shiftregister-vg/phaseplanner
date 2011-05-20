@@ -6,9 +6,9 @@ package org.stevegood.phaseplanner.plan
 	import org.stevegood.phaseplanner.phase.Phase;
 	import org.stevegood.phaseplanner.phase.PhaseIterator;
 	
-	public class Plan extends BaseBean
-	{
+	public class Plan extends BaseBean{
 		private var _phases:Vector.<Phase>;
+		private var _name:String;
 		
 		public function Plan()
 		{
@@ -30,6 +30,16 @@ package org.stevegood.phaseplanner.plan
 		
 		public function getPhaseIterator():PhaseIterator{
 			return new PhaseIterator(_phases);
+		}
+		
+		[Bindable (event="nameChanged")]
+		public function get name():String{
+			return _name;
+		}
+		
+		public function set name(value:String):void{
+			_name = value;
+			dispatchEvent(new Event("nameChanged"));
 		}
 		
 	}
