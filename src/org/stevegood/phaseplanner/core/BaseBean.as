@@ -1,9 +1,7 @@
 package org.stevegood.phaseplanner.core
 {
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
 
-	public class BaseBean extends EventDispatcher{
+	public class BaseBean extends BaseEventDispatcher{
 				
 		public function BaseBean(){
 			super();

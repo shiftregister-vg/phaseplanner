@@ -7,10 +7,33 @@
 	<fx:Script>
 		<![CDATA[
 			import org.stevegood.phaseplanner.core.AppEvent;
+			import org.stevegood.phaseplanner.persist.DiskPersistenceService;
+			import org.stevegood.phaseplanner.persist.PersistenceEvent;
+			import org.stevegood.phaseplanner.phase.Phase;
 			import org.stevegood.phaseplanner.plan.Plan;
+			import org.stevegood.phaseplanner.session.Session;
 			
 			private function onCreationComplete():void{
 				dispatchEvent(new AppEvent(AppEvent.APPLICATION_CREATION_COMPLETE));
+				
+				
+				var plan:Plan = new Plan();
+				plan.name = "Test Plan";
+				
+				var phase:Phase = new Phase();
+				phase.plan = plan;
+				phase.name = "Test Phase";
+				
+				plan.addPhase(phase);
+				
+				var e:PersistenceEvent = new PersistenceEvent(PersistenceEvent.SAVE_OBJECT);
+				e.fileName = plan.name + "." + DiskPersistenceService.FILE_EXTENSION;
+				e.object = plan;
+				dispatchEvent(e);
+				
+				e = new PersistenceEvent(PersistenceEvent.LOAD_OBJECT);
+				e.fileName = plan.name + "." + DiskPersistenceService.FILE_EXTENSION;
+				dispatchEvent(e);
 			}
 			
 		]]>

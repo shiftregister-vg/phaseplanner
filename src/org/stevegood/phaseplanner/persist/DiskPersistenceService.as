@@ -1,9 +1,18 @@
 package org.stevegood.phaseplanner.persist
 {
-	import flash.events.EventDispatcher;
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
+	import flash.utils.ByteArray;
+	import flash.utils.Timer;
 	
-	public class DiskPersistenceService extends EventDispatcher{
+	import org.stevegood.phaseplanner.core.BaseEventDispatcher;
+	import org.stevegood.phaseplanner.processor.ObjectProcessorEvent;
+	
+	public class DiskPersistenceService extends BaseEventDispatcher{
 		
 		public static const FILE_EXTENSION:String = "bpx";
 		public static const SETTINGS_FILE:String = "settings.bps";
@@ -12,16 +21,41 @@ package org.stevegood.phaseplanner.persist
 			super(target);
 		}
 		
-		public function writeObjectToFile(fileName:String,object:Object):void{
-			
+		public function writeObjectToFile(fileName:String,object:*):void{
+			var timer:Timer = new Timer(100,1);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE,function(event:TimerEvent):void{
+				var file:File = File.applicationStorageDirectory.resolvePath(fileName);
+				var fileStream:FileStream = new FileStream();
+				var byteArray:ByteArray = new ByteArray();
+				byteArray.writeObject(object);
+				fileStream.open(file, FileMode.WRITE);
+				fileStream.writeBytes( byteArray );
+				fileStream.close();
+				dispatchEvent(new Event("fileSaved"));
+			});
+			timer.start();
 		}
 		
 		public function deleteObjectFile(fileName:String):void{
-			
+			var file:File = File.applicationStorageDirectory.resolvePath(fileName);
+			if (file.exists){
+				file.deleteFile();
+			}
 		}
 		
-		public function readObjectFromFile(fileName:String):Object{
-			return null;
+		public function readObjectFromFile(fileName:String):void{
+			var object:*;
+			var file:File = File.applicationStorageDirectory.resolvePath(fileName);
+			if (file.exists){
+				var fileStream:FileStream = new FileStream();
+				fileStream.open(file, FileMode.READ);
+				object = fileStream.readObject();
+				fileStream.close();
+				
+				var e:ObjectProcessorEvent = new ObjectProcessorEvent(ObjectProcessorEvent.PROCESS_OBJECT);
+				e.object = object;
+				dispatchEvent(e);
+			}
 		}
 		
 	}
