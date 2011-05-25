@@ -1,36 +1,29 @@
 package org.stevegood.phaseplanner.step
 {
-	import flash.events.Event;
 	
 	import org.stevegood.phaseplanner.core.BaseBean;
-	import org.stevegood.phaseplanner.goal.Goal;
 	
+	[RemoteClass('org.stevegood.phaseplanner.step.Step')]
 	public class Step extends BaseBean{
-		private var _name:String;
-		private var _goal:Goal;
+		
+		[Bindable] public var name:String;
+		[Bindable] public var complete:Boolean = false;
 		
 		public function Step(){
 			super();
 		}
 		
-		[Bindable (event="nameChanged")]
-		public function get name():String{
-			return _name;
+		public function isComplete():Boolean{
+			return complete;
 		}
 		
-		public function set name(value:String):void{
-			_name = value;
-			dispatchEvent(new Event("nameChanged"));
+		public function closeStep():void{
+			complete = true;
 		}
 		
-		[Bindable (event="goalChanged")]
-		public function get goal():Goal{
-			return _goal;
+		public function openStep():void{
+			complete = false;
 		}
 		
-		public function set goal(value:Goal):void{
-			_goal = value;
-			dispatchEvent(new Event("goalChanged"));
-		}
 	}
 }

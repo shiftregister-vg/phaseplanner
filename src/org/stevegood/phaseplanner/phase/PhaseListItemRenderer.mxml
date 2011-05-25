@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" rollOverColor="0x000000">
+	
+	<fx:Script>
+		<![CDATA[
+			
+			private function getIncompleteGoalsCount(data:*):int{
+				var count:int = 0;
+				
+				if (data != null){
+					count = data.numGoalsIncomplete();
+				}
+				
+				return count;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+	</s:states>
+	
+	<s:Group width="100%" height="50" toolTip="{data.isComplete() > 0 ? null : 'This phase is incomplete'}">
+		<s:Rect x="0" y="0" width="100%" height="100%">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0xFFFFFF" ratio="0" />
+					<s:GradientEntry color="0xDEDEDE" ratio=".33" alpha.hovered="0.85" alpha.selected="0.85" />
+					<s:GradientEntry color="0xCCCCCC" ratio=".66" alpha.hovered="0.85" alpha.selected="0.85" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
+		<s:HGroup x="0" y="0" width="100%" height="100%" verticalAlign="middle" paddingLeft="20" paddingRight="20">
+			<s:Group>
+				<s:Label y="1" text="{data.name}" fontSize="12" color="0xFFFFFF" fontWeight="bold"/>
+				<s:Label text="{data.name}" fontSize="12" color="0x333333" color.hovered="0x000000" color.selected="0x000000" fontWeight="bold"/>
+			</s:Group>
+			<s:Spacer width="100%" />
+			<s:Label id="goalsIncomplete" text="{getIncompleteGoalsCount(data)}" fontSize="12" color="0x333333" color.hovered="0x000000" color.selected="0x000000" fontWeight="bold" />
+		</s:HGroup>
+		
+	</s:Group>
+	
+	
+</s:ItemRenderer>

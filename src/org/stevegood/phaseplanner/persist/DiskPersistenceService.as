@@ -22,18 +22,14 @@ package org.stevegood.phaseplanner.persist
 		}
 		
 		public function writeObjectToFile(fileName:String,object:*):void{
-			var timer:Timer = new Timer(100,1);
-			timer.addEventListener(TimerEvent.TIMER_COMPLETE,function(event:TimerEvent):void{
-				var file:File = File.applicationStorageDirectory.resolvePath(fileName);
-				var fileStream:FileStream = new FileStream();
-				var byteArray:ByteArray = new ByteArray();
-				byteArray.writeObject(object);
-				fileStream.open(file, FileMode.WRITE);
-				fileStream.writeBytes( byteArray );
-				fileStream.close();
-				dispatchEvent(new Event("fileSaved"));
-			});
-			timer.start();
+			var file:File = File.applicationStorageDirectory.resolvePath(fileName);
+			trace(file.nativePath);
+			var fileStream:FileStream = new FileStream();
+			var byteArray:ByteArray = new ByteArray();
+			byteArray.writeObject(object);
+			fileStream.open(file, FileMode.WRITE);
+			fileStream.writeBytes( byteArray );
+			fileStream.close();
 		}
 		
 		public function deleteObjectFile(fileName:String):void{

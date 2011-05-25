@@ -3,37 +3,36 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:eventmap="org.stevegood.phaseplanner.eventmap.*"
-					   creationComplete="onCreationComplete()">
+					   creationComplete="onCreationComplete()"
+					   showStatusBar="false">
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
 			import org.stevegood.phaseplanner.core.AppEvent;
-			import org.stevegood.phaseplanner.persist.DiskPersistenceService;
-			import org.stevegood.phaseplanner.persist.PersistenceEvent;
-			import org.stevegood.phaseplanner.phase.Phase;
+			import org.stevegood.phaseplanner.core.Utils;
+			import org.stevegood.phaseplanner.phase.PhaseIterator;
 			import org.stevegood.phaseplanner.plan.Plan;
-			import org.stevegood.phaseplanner.session.Session;
+			
+			private var _plan:Plan;
+			
+			[Bindable (event="planChange")]
+			public function get plan():Plan{
+				return _plan
+			}
+			
+			public function set plan(value:Plan):void{
+				_plan = value;
+				dispatchEvent(new Event("planChanged"));
+				setPhaseListDataProvider();
+			}
 			
 			private function onCreationComplete():void{
 				dispatchEvent(new AppEvent(AppEvent.APPLICATION_CREATION_COMPLETE));
-				
-				
-				var plan:Plan = new Plan();
-				plan.name = "Test Plan";
-				
-				var phase:Phase = new Phase();
-				phase.plan = plan;
-				phase.name = "Test Phase";
-				
-				plan.addPhase(phase);
-				
-				var e:PersistenceEvent = new PersistenceEvent(PersistenceEvent.SAVE_OBJECT);
-				e.fileName = plan.name + "." + DiskPersistenceService.FILE_EXTENSION;
-				e.object = plan;
-				dispatchEvent(e);
-				
-				e = new PersistenceEvent(PersistenceEvent.LOAD_OBJECT);
-				e.fileName = plan.name + "." + DiskPersistenceService.FILE_EXTENSION;
-				dispatchEvent(e);
+			}
+			
+			private function setPhaseListDataProvider():void{
+				phaseList.dataProvider = new ArrayCollection(Utils.vectorToArray(plan.phases));
 			}
 			
 		]]>
@@ -42,4 +41,8 @@
 	<fx:Declarations>
 		<eventmap:MainEventMap />
 	</fx:Declarations>
+	<s:List id="phaseList" width="100%" height="100%" itemRenderer="org.stevegood.phaseplanner.phase.PhaseListItemRenderer" borderVisible="false"></s:List>
+	
+	
+	
 </s:WindowedApplication>

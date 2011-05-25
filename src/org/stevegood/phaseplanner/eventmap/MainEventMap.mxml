@@ -6,6 +6,8 @@
 	<fx:Script>
 		<![CDATA[
 			import org.stevegood.phaseplanner.core.AppEvent;
+			import org.stevegood.phaseplanner.session.Session;
+			import org.stevegood.phaseplanner.test.TestDataBuilder;
 		]]>
 	</fx:Script>
 	
@@ -14,13 +16,19 @@
 		<mate:Debugger level="{Debugger.ALL}" />
 		
 		<mate:EventHandlers type="{AppEvent.APPLICATION_CREATION_COMPLETE}" debug="true">
-			
+			<mate:ObjectBuilder generator="{Session}" />
+			<mate:MethodInvoker generator="{TestDataBuilder}" method="buildTestData" /> <!-- this call should be removed before building the app -->
 		</mate:EventHandlers>
 		
 		
 		<eventmap:PersistenceEventMap />
 		<eventmap:ObjectProcessingEventMap />
 		<eventmap:PlanEventMap />
+		
+		<mate:Injectors target="{Main}">
+			<mate:PropertyInjector source="{Session}" sourceKey="plan" targetKey="plan" />
+		</mate:Injectors>
+		
 	</fx:Declarations>
 	
 </mate:EventMap>

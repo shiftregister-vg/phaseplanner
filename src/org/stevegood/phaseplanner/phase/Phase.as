@@ -7,51 +7,50 @@ package org.stevegood.phaseplanner.phase
 	import org.stevegood.phaseplanner.goal.GoalIterator;
 	import org.stevegood.phaseplanner.plan.Plan;
 	
+	[RemoteClass('org.stevegood.phaseplanner.phase.Phase')]
 	public class Phase extends BaseBean{
-		private var _goals:Vector.<Goal>;
-		private var _name:String;
-		private var _plan:Plan;
+		
+		[Bindable] public var goals:Vector.<Goal> = new Vector.<Goal>;
+		[Bindable] public var name:String;
 		
 		public function Phase(){
 			super();
 		}
 		
-		[Bindable (event="goalsChanged")]
-		public function get goals():Vector.<Goal>{
-			return _goals;
-		}
-		
 		public function addGoal(goal:Goal):void{
-			if (_goals == null){
-				_goals = new Vector.<Goal>;
+			if (goals == null){
+				goals = new Vector.<Goal>;
 			}
 			
-			_goals.push(goal);
-			dispatchEvent(new Event("goalsChanged"));
+			goals.push(goal);
 		}
 		
 		public function getGoalIterator():GoalIterator{
-			return new GoalIterator(_goals);
+			return new GoalIterator(goals);
 		}
 		
-		[Bindable (event="nameChanged")]
-		public function get name():String{
-			return _name;
+		public function isComplete():Boolean{
+			var it:GoalIterator = getGoalIterator();
+			while (goals != null && goals.length > 0 && it.hasNext()){
+				var goal:Goal = it.next() as Goal;
+				if (!goal.isComplete()){
+					return false;
+				}
+			}
+			return true;
 		}
 		
-		public function set name(value:String):void{
-			_name = value;
-			dispatchEvent(new Event("nameChanged"));
-		}
-		
-		[Bindable (event="planChanged")]
-		public function get plan():Plan{
-			return _plan;
-		}
-		
-		public function set plan(value:Plan):void{
-			_plan = value;
-			dispatchEvent(new Event("planChanged"));
+		//[Bindable (event="goalsChanged")]
+		public function numGoalsIncomplete():int{
+			var goalNum:int = goals == null ? 0 : goals.length;
+			var it:GoalIterator = getGoalIterator();
+			while (goalNum > 0 && it.hasNext()){
+				var goal:Goal = it.next() as Goal;
+				if (goal.isComplete()){
+					goalNum--;
+				}
+			}
+			return goalNum;
 		}
 		
 	}

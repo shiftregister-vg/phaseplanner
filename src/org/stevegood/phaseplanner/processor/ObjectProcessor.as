@@ -13,8 +13,7 @@ package org.stevegood.phaseplanner.processor
 		}
 		
 		public function processObject(object:*):void{
-			// TODO: determine the object's type and dispatch the correct event
-			trace(object is Plan);
+			// determine the object's type and dispatch the correct event
 			if (object is Plan){
 				var pe:PlanEvent = new PlanEvent(PlanEvent.PLAN_LOADED);
 				pe.plan = object as Plan;

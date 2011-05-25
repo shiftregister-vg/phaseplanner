@@ -6,9 +6,11 @@ package org.stevegood.phaseplanner.plan
 	import org.stevegood.phaseplanner.phase.Phase;
 	import org.stevegood.phaseplanner.phase.PhaseIterator;
 	
+	[RemoteClass('org.stevegood.phaseplanner.plan.Plan')]
 	public class Plan extends BaseBean{
-		private var _phases:Vector.<Phase>;
-		private var _name:String;
+		private var _phases:Vector.<Phase> = new Vector.<Phase>;
+		
+		[Bindable] public var name:String;
 		
 		public function Plan()
 		{
@@ -18,6 +20,11 @@ package org.stevegood.phaseplanner.plan
 		[Bindable (event="phaseChange")]
 		public function get phases():Vector.<Phase>{
 			return _phases;
+		}
+		
+		public function set phases(value:Vector.<Phase>):void{
+			_phases = value;
+			dispatchEvent(new Event("phaseChange"));
 		}
 
 		public function addPhase(phase:Phase):void{
@@ -30,16 +37,6 @@ package org.stevegood.phaseplanner.plan
 		
 		public function getPhaseIterator():PhaseIterator{
 			return new PhaseIterator(_phases);
-		}
-		
-		[Bindable (event="nameChanged")]
-		public function get name():String{
-			return _name;
-		}
-		
-		public function set name(value:String):void{
-			_name = value;
-			dispatchEvent(new Event("nameChanged"));
 		}
 		
 	}
