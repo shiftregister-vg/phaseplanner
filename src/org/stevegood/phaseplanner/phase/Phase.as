@@ -2,6 +2,8 @@ package org.stevegood.phaseplanner.phase
 {
 	import flash.events.Event;
 	
+	import mx.collections.ArrayCollection;
+	
 	import org.stevegood.phaseplanner.core.BaseBean;
 	import org.stevegood.phaseplanner.goal.Goal;
 	import org.stevegood.phaseplanner.goal.GoalIterator;
@@ -10,7 +12,7 @@ package org.stevegood.phaseplanner.phase
 	[RemoteClass('org.stevegood.phaseplanner.phase.Phase')]
 	public class Phase extends BaseBean{
 		
-		[Bindable] public var goals:Vector.<Goal> = new Vector.<Goal>;
+		[Bindable] public var goals:ArrayCollection = new ArrayCollection();
 		[Bindable] public var name:String;
 		
 		public function Phase(){
@@ -19,10 +21,10 @@ package org.stevegood.phaseplanner.phase
 		
 		public function addGoal(goal:Goal):void{
 			if (goals == null){
-				goals = new Vector.<Goal>;
+				goals = new ArrayCollection();
 			}
 			
-			goals.push(goal);
+			goals.addItem(goal);
 		}
 		
 		public function getGoalIterator():GoalIterator{

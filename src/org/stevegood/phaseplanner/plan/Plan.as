@@ -2,14 +2,15 @@ package org.stevegood.phaseplanner.plan
 {
 	import flash.events.Event;
 	
+	import mx.collections.ArrayCollection;
+	
 	import org.stevegood.phaseplanner.core.BaseBean;
 	import org.stevegood.phaseplanner.phase.Phase;
 	import org.stevegood.phaseplanner.phase.PhaseIterator;
 	
 	[RemoteClass('org.stevegood.phaseplanner.plan.Plan')]
 	public class Plan extends BaseBean{
-		private var _phases:Vector.<Phase> = new Vector.<Phase>;
-		
+		[Bindable] public var phases:ArrayCollection = new ArrayCollection();
 		[Bindable] public var name:String;
 		
 		public function Plan()
@@ -17,26 +18,27 @@ package org.stevegood.phaseplanner.plan
 			super();
 		}
 		
-		[Bindable (event="phaseChange")]
-		public function get phases():Vector.<Phase>{
-			return _phases;
-		}
-		
-		public function set phases(value:Vector.<Phase>):void{
-			_phases = value;
-			dispatchEvent(new Event("phaseChange"));
-		}
-
 		public function addPhase(phase:Phase):void{
-			if (_phases == null){
-				_phases = new Vector.<Phase>;
+			if (phases == null){
+				phases = new ArrayCollection();
 			}
-			_phases.push(phase);
+			phases.addItem(phase);
 			dispatchEvent(new Event("phaseChange"));
 		}
 		
 		public function getPhaseIterator():PhaseIterator{
-			return new PhaseIterator(_phases);
+			return new PhaseIterator(phases);
+		}
+		
+		public function getFirstIncompletePhase():Phase{
+			var it:PhaseIterator = getPhaseIterator();
+			while (it.hasNext()){
+				var phase:Phase = it.next() as Phase;
+				if (!phase.isComplete()){
+					return phase;
+				}
+			}
+			return null;
 		}
 		
 	}

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
-					   xmlns:s="library://ns.adobe.com/flex/spark" 
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:eventmap="org.stevegood.phaseplanner.eventmap.*"
-					   creationComplete="onCreationComplete()"
-					   showStatusBar="false">
+					   creationComplete="onCreationComplete()" showStatusBar="false">
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -32,7 +32,8 @@
 			}
 			
 			private function setPhaseListDataProvider():void{
-				phaseList.dataProvider = new ArrayCollection(Utils.vectorToArray(plan.phases));
+				phaseDDL.dataProvider = plan.phases;
+				phaseDDL.selectedItem = plan.getFirstIncompletePhase();
 			}
 			
 		]]>
@@ -41,8 +42,14 @@
 	<fx:Declarations>
 		<eventmap:MainEventMap />
 	</fx:Declarations>
-	<s:List id="phaseList" width="100%" height="100%" itemRenderer="org.stevegood.phaseplanner.phase.PhaseListItemRenderer" borderVisible="false"></s:List>
 	
+	<s:layout>
+		<s:VerticalLayout gap="0" />
+	</s:layout>
 	
+	<s:DropDownList id="phaseDDL" prompt="Select Phase" width="100%" height="50" labelField="name" itemRenderer="org.stevegood.phaseplanner.phase.PhaseListItemRenderer"></s:DropDownList>
+	<mx:Tree dataProvider="{phaseDDL.selectedItem.goals}" width="100%" height="100%" borderVisible="false">
+		
+	</mx:Tree>
 	
 </s:WindowedApplication>
