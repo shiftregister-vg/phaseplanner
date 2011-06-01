@@ -1,8 +1,11 @@
 package org.stevegood.phaseplanner.phase
 {
 	import flash.events.Event;
+	import flash.xml.XMLNode;
+	import flash.xml.XMLNodeType;
 	
 	import mx.collections.ArrayCollection;
+	import mx.collections.XMLListCollection;
 	
 	import org.stevegood.phaseplanner.core.BaseBean;
 	import org.stevegood.phaseplanner.goal.Goal;
@@ -53,6 +56,10 @@ package org.stevegood.phaseplanner.phase
 				}
 			}
 			return goalNum;
+		}
+		
+		public function get children():ArrayCollection{
+			return goals;
 		}
 		
 	}

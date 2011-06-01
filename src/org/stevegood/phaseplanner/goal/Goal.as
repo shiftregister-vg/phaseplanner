@@ -42,5 +42,9 @@ package org.stevegood.phaseplanner.goal
 			return true;
 		}
 		
+		public function get children():ArrayCollection{
+			return steps;
+		}
+		
 	}
 }
